@@ -12,6 +12,7 @@ interface FileListProps {
   onCreateFolder: (name: string, parentId: string | null) => boolean;
   onUploadImage: (file: File, parentId: string | null) => void;
   onToggleFolder: (id: string) => void;
+  onClose?: () => void;
 }
 
 const FileList: React.FC<FileListProps> = ({ 
@@ -22,7 +23,8 @@ const FileList: React.FC<FileListProps> = ({
   onCreateFile,
   onCreateFolder,
   onUploadImage,
-  onToggleFolder
+  onToggleFolder,
+  onClose
 }) => {
   const [creationState, setCreationState] = useState<{
     type: 'file' | 'folder' | null;
@@ -214,7 +216,7 @@ const FileList: React.FC<FileListProps> = ({
 
       <div className="p-4 border-b border-gray-800 flex justify-between items-center bg-[#1e1e1e]">
         <h2 className="font-semibold text-sm uppercase tracking-wider text-gray-400">Arquivos</h2>
-        <div className="flex gap-1">
+        <div className="flex items-center gap-1">
             <button onClick={() => triggerImageUpload(null)} className="p-1.5 hover:bg-gray-700 rounded transition-colors" title="Upload Imagem">
                 <Upload size={16} className="text-gray-300" />
             </button>
@@ -224,6 +226,11 @@ const FileList: React.FC<FileListProps> = ({
             <button onClick={() => startCreating('file', null)} className="p-1.5 hover:bg-gray-700 rounded transition-colors" title="Novo Arquivo">
                 <Plus size={16} className="text-gray-300" />
             </button>
+            {onClose && (
+              <button onClick={onClose} className="p-1.5 ml-2 hover:bg-gray-700 rounded transition-colors md:hidden text-gray-400" title="Fechar Menu">
+                  <X size={18} />
+              </button>
+            )}
         </div>
       </div>
       

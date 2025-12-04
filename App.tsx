@@ -7,9 +7,15 @@ import CodeEditor from './components/CodeEditor';
 import Preview from './components/Preview';
 import AIAssistant from './components/AIAssistant';
 import FileList from './components/FileList';
+import AuthScreen from './components/AuthScreen';
 import { Code2, Play, Sparkles, Menu, FolderOpen, PanelRightClose } from 'lucide-react';
 
 const App: React.FC = () => {
+  // Auth State
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    return localStorage.getItem('mobilecoder_auth_key') === 'valid';
+  });
+
   // Initialize files from LocalStorage or fallback
   const [files, setFiles] = useState<CodeFile[]>(() => {
     try {
@@ -217,6 +223,10 @@ const App: React.FC = () => {
     }
   };
 
+  if (!isAuthenticated) {
+    return <AuthScreen onSuccess={() => setIsAuthenticated(true)} />;
+  }
+
   return (
     <div className="flex flex-col h-dvh bg-[#0f0f11] overflow-hidden">
       {/* Header */}
@@ -253,11 +263,6 @@ const App: React.FC = () => {
             ${showSidebar ? 'shadow-2xl' : ''}
           `}
         >
-          <div className="md:hidden absolute top-2 right-2">
-            <button onClick={() => setShowSidebar(false)} className="p-2 text-gray-400">
-              <PanelRightClose size={20} />
-            </button>
-          </div>
           <FileList 
             files={files} 
             activeFileId={activeFileId} 
@@ -267,6 +272,7 @@ const App: React.FC = () => {
             onCreateFolder={handleAddFolder}
             onUploadImage={handleUploadImage}
             onToggleFolder={handleToggleFolder}
+            onClose={() => setShowSidebar(false)}
           />
         </aside>
 

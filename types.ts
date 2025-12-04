@@ -20,6 +20,12 @@ export interface ChatMessage {
   isError?: boolean;
 }
 
+export interface AIConfig {
+  name: string;
+  avatarUrl: string;
+  systemInstruction: string;
+}
+
 export enum TabView {
   EDITOR = 'EDITOR',
   PREVIEW = 'PREVIEW',
